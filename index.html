@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html ng-app="market">
+	
+<head>
+	
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	
+	<title>Amore - Market Best List Extract Tool</title>
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+	
+</head>
+
+<body>
+	
+	<div class="container-fluid" ng-controller="MarketController as ctrl">
+		<div class="page-header">
+			<h3><span style="color: red;" class="glyphicon glyphicon-heart"></span> 
+			Amore - Market Best List Extract Tool 
+			<span style="color: red;" class="glyphicon glyphicon-heart"></span></h3>
+		</div>
+		
+		<div class="panel panel-default">
+			<div class="panel-body" >
+				<form name="form" novalidate ng-submit="exportData(querydata)">
+					
+					<div class="form-group" 
+					ng-class="{ 
+					'has-error': form.content.$error.required || (form.$submitted && !result.length), 
+					'has-success': form.content.$valid }" >
+						<label>Put the source here amore!</label>
+						<textarea ng-model="querydata.content" class="form-control" name="content" required ></textarea>
+					</div>
+					
+					<div class="form-group" >
+						<label class="radio-inline">
+							<input ng-model="querydata.site" type="radio" name="site" value="11st" checked> 11st
+						</label>
+						<label class="radio-inline">
+							<input ng-model="querydata.site" type="radio" name="site" value="gmarket"> gmarket
+						</label>
+					</div>
+					
+					<div class="form-group" >
+						<button type="submit" class="btn btn-default btn-primary">Generate</button>
+					</div> 
+				</form>
+				
+			</div>
+		</div>
+		
+		<div class="panel panel-default" ng-show="form.$submitted && !result.length">
+			<div class="panel-body bg-warning" >
+				<span class="glyphicon glyphicon-remove"></span> Try again amore mio!
+			</div>
+		</div>
+		
+		<div ng-show="result.length">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<p class="navbar-text">You can search data: </p>
+						<form name="searchform" class="navbar-form navbar-left" role="search" >
+							<div class="form-group">
+								<input ng-model="filter.$" type="text" class="form-control">
+							</div>
+						</form>
+					</div>
+				</div>
+			</nav>
+			
+			<div class="result">
+				<table id="pretty-table" class="table table-condensed table-striped">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Title</th>
+							<th>Link</th>
+							<th>Seller</th>
+							<th>Price</th>
+							<th>Price2</th>
+							<th>Delivery</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="d in result | filter : filter">
+							<td>{{d.rank}}</td>
+							<td>{{d.title}}</td>
+							<td>{{d.link}}</td>
+							<td>{{d.seller}}</td>
+							<td>{{d.price}}</td>
+							<td>{{d.price2}}</td>
+							<td>{{d.freedelivery}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+
+<script src="11st_best_extract.js"></script>
+<script src="gmarket_best_extract.js"></script>
+<script src="main.js"></script>
+
+<script>
+(function(){
+	"use strict";
+	
+	var _extract = function(){
+        var dom = $($('textarea[name=content]').val());
+		//console.log(dom);
+        var result = extract[$('[name=site]:checked').val()](dom);
+        console.log(result);
+		
+		var tb = $('.result table tbody').empty();
+        for(var i = 0; i < result.length; i++){
+            
+            var tr = $('<tr>').appendTo(tb);
+            $('<td>').text(i+1).appendTo(tr);
+            $('<td>').text(result[i].title).appendTo(tr);
+            $('<td>').text(result[i].link).appendTo(tr);
+            $('<td>').text(result[i].seller).appendTo(tr);
+            $('<td>').text(result[i].price).appendTo(tr);
+            $('<td>').text(result[i].price2).appendTo(tr);
+            $('<td>').text(result[i].freedelivery).appendTo(tr);
+        }
+
+	};
+	
+	
+})(jQuery);
+</script>
+	
+</body>
+
+</html>

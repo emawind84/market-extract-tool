@@ -1,0 +1,21 @@
+{
+  "name": "market-best-export",
+  "version": "1.0.0",
+  "description": "marker best list export",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "system",
+    "configuration",
+    "properties"
+  ],
+  "author": "Emanuele Disco",
+  "license": "ISC",
+  "dependencies": {
+	  "connect": "latest",
+	  "serve-static": "latest"
+  }
+}
