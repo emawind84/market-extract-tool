@@ -4,11 +4,11 @@
     window.extractData['gmarket'] = function(doc){
         console.log('extracting gmarket data...');
         var result = [];
-        $('.best-list', doc).not('.type2').find('ul > li').each(function(){
+        $('.best-list', doc).not('.type2').find('ul > li').each(function(index, value){
             var title = $(this).find('.itemname').text();
             var link = $(this).find('.itemname').attr('href');
-            var price = $(this).find('.o-price span span').text();
-            var price2 = $(this).find('.s-price strong span span').text();
+            var price = $(this).find('.o-price span span').text().replace('~','').replace('원','');
+            var price2 = $(this).find('.s-price strong span span').text().replace('~','').replace('원','');
             var freedelivery = $(this).find('.icon img').attr('alt');
             
             var seller = $(this).html()
@@ -23,7 +23,8 @@
                 price: price,
                 price2: price2,
                 freedelivery: freedelivery,
-                seller: seller
+                seller: seller,
+                rank: index + 1
             });
         });
 

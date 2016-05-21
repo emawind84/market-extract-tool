@@ -42,7 +42,16 @@
 							<input ng-model="querydata.site" type="radio" name="site" value="11st" checked> 11st
 						</label>
 						<label class="radio-inline">
-							<input ng-model="querydata.site" type="radio" name="site" value="gmarket"> gmarket
+							<input ng-model="querydata.site" type="radio" name="site" value="gmarket"> Gmarket
+						</label>
+						<label class="radio-inline">
+							<input ng-model="querydata.site" type="radio" name="site" value="auction"> Auction
+						</label>
+						<label class="radio-inline">
+							<input ng-model="querydata.site" type="radio" name="site" value="wemak"> 위메프
+						</label>
+						<label class="radio-inline">
+							<input ng-model="querydata.site" type="radio" name="site" value="coupang"> Coupang
 						</label>
 					</div>
 					
@@ -86,6 +95,7 @@
 							<th>Price</th>
 							<th>Price2</th>
 							<th>Delivery</th>
+							<th>Other</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -97,6 +107,7 @@
 							<td>{{d.price}}</td>
 							<td>{{d.price2}}</td>
 							<td>{{d.freedelivery}}</td>
+							<td>{{d.more}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -110,6 +121,9 @@
 
 <script src="11st_best_extract.js"></script>
 <script src="gmarket_best_extract.js"></script>
+<script src="auction_best_extract.js"></script>
+<script src="wemak_best_extract.js"></script>
+<script src="coupang_best_extract.js"></script>
 <script src="main.js"></script>
 
 <script>

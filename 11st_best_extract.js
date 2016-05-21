@@ -9,12 +9,12 @@
             var rank = $(this).find('.flg_ranking').text();
             var title = $(this).find('.pup_title a').text();
             var link = $(this).find('.pup_title a').attr('href');
-            var price = $(this).find('.pub_price').text();
+            var price = $(this).find('.pub_price').text().replace('~','').replace('원','');
             var freedelivery = $(this).find('.ico_deliver1 b').text();
             var seller = $(this).find('.seller_id > a').text();
             
             $(this).find('.pub_salep').find('.plus_option').remove()
-            var price2 = $(this).find('.pub_salep').text();
+            var price2 = $(this).find('.pub_salep').text().replace('~','').replace('원','');
             
             result.push({
                 rank: rank,
