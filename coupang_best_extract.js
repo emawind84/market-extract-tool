@@ -6,7 +6,7 @@
         var result = [];
         $('.product-list', doc).find('> ul > li').each(function( index, value ){
             var title = $(this).find('.title em').text();
-            var link = $(this).find('a.detail-link').attr('href');
+            var link = 'http://www.coupang.com' + $(this).find('a.detail-link').attr('href');
             var price = $(this).find('.price-detail .original span').text().replace('~','').replace('원','');
             var price2 = $(this).find('.price-detail .price em').text().replace('~','').replace('원','');
             var freedelivery = $(this).find('.delivery-free').text();
