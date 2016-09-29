@@ -1,0 +1,54 @@
+{
+  "template": "bestmarket",
+  "mappings": {
+    "_default_": {
+      "properties": {
+        "rank": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "title": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer"
+        },
+        "price2": {
+          "type": "integer"
+        },
+        "freedelivery": {
+          "type": "string"
+        },
+        "seller": {
+          "type": "string"
+        },
+        "more": {
+          "type": "string"
+        }
+      },
+      "_all": {
+        "enabled": false
+      },
+      "dynamic_templates": [
+        {
+          "strings": {
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "string",
+              "fields": {
+                "raw": {
+                  "type": "string",
+                  "index": "not_analyzed",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

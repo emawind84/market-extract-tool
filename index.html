@@ -27,7 +27,7 @@
 		
 		<div class="panel panel-default">
 			<div class="panel-body" >
-				<form name="form" novalidate ng-submit="exportData(querydata)">
+				<form name="form" novalidate ng-submit="parseData(querydata)">
 					
 					<div class="form-group" 
 					ng-class="{ 
@@ -60,6 +60,7 @@
 					
 					<div class="form-group" >
 						<button type="submit" class="btn btn-default btn-primary">Generate</button>
+                        <button type="submit" class="btn btn-default" ng-show="result.length" ng-click="saveData()">Save Data</button>
 					</div> 
 				</form>
 				
