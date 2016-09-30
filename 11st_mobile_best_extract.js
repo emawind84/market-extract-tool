@@ -1,8 +1,10 @@
 (function(){
     "use strict";
+
+    var market_code = '11st_mobile';
     
     window.extractData || (window.extractData = {});
-    window.extractData['11st_mobile'] = function(doc){
+    window.extractData[market_code] = function(doc){
         console.log('extracting 11st data...');
         var result = [];
         $('.thumbnail_list > ul > li', doc).not('.ranking_more').each(function(){
@@ -23,7 +25,8 @@
                 price: price,
                 price2: price2,
                 freedelivery: freedelivery,
-                seller: seller
+                seller: seller,
+                market: market_code
                 //,dom: this
             });
         });

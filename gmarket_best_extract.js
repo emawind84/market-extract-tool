@@ -1,7 +1,9 @@
 (function(){
     
+    var market_code = 'gmarket';
+
     window.extractData || (window.extractData = {});
-    window.extractData['gmarket'] = function(doc){
+    window.extractData[market_code] = function(doc){
         console.log('extracting gmarket data...');
         var result = [];
         $('.best-list', doc).not('.type2').find('ul > li').each(function(index, value){
@@ -10,6 +12,7 @@
             var price = $(this).find('.o-price span span').text().replace('~','').replace('원','');
             var price2 = $(this).find('.s-price strong span span').text().replace('~','').replace('원','');
             var freedelivery = $(this).find('.icon img').attr('alt');
+            var image = $(this).find('.thumb img').attr('data-original');
             
             var seller = $(this).html()
             seller = seller.replace(/(<!--div)/, '<div').replace(/(\/div-->)/, '\/div>');
@@ -18,13 +21,15 @@
             seller = seller.html().trim();
             
             result.push({
+                rank: index + 1,
                 title: title,
                 link: link,
                 price: price,
                 price2: price2,
                 freedelivery: freedelivery,
                 seller: seller,
-                rank: index + 1
+                market: market_code,
+                image: image
             });
         });
 

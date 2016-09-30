@@ -1,7 +1,9 @@
 (function(){
+
+    var market_code = 'wemak';
     
     window.extractData || (window.extractData = {});
-    window.extractData['wemak'] = function(doc){
+    window.extractData[market_code] = function(doc){
         console.log('extracting wemak data...');
         var result = [];
         $('.section_list', doc).find('> ul > li').each(function( index, value ){
@@ -11,7 +13,7 @@
             var price2 = $(this).find('.sale').text().replace('~','').replace('원','');
             var freedelivery = $(this).find('.option_l span').text();
             var more = $(this).find('.box_desc .standardinfo').text();
-            
+            console.log(result);
             result.push({
                 title: title,
                 link: link,
@@ -20,7 +22,8 @@
                 freedelivery: freedelivery,
                 seller: null,
                 rank: index + 1,
-                more: more
+                more: more,
+                market: market_code
             });
         });
 
