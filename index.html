@@ -1,44 +1,34 @@
 <!DOCTYPE HTML>
 <html ng-app="market">
-	
+    
 <head>
-	
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-	
-	<title>Amore - Market Best List Extract Tool</title>
-	
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    
+    <title>Amore - Market Best List Extract Tool</title>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 
-	
 </head>
 
 <body>
-	
-	<div class="container-fluid" ng-controller="MarketController as ctrl">
-		<div class="page-header">
-			<h3><span style="color: red;" class="glyphicon glyphicon-heart"></span> 
-			Amore - Market Best List Extract Tool 
-			<span style="color: red;" class="glyphicon glyphicon-heart"></span></h3>
-		</div>
-		
+    
+    <div class="container-fluid" ng-controller="MarketController as ctrl">
+        <div class="page-header">
+            <h3><span style="color: red;" class="glyphicon glyphicon-heart"></span> 
+            Amore - Market Best List Extract Tool 
+            <span style="color: red;" class="glyphicon glyphicon-heart"></span></h3>
+        </div>
+        
         <div class="row">
-            <div class="col-md-9">
+            <div ng-class="selectedProduct.image ? 'col-md-9' : 'col-md-12'">
                 <div class="panel panel-default">
                     <div class="panel-body" >
                         <form name="form" novalidate ng-submit="parseData(querydata)">
-                            
-                            <div class="form-group" 
-                            ng-class="{ 
-                            'has-error': form.content.$error.required || (form.$submitted && !result.length), 
-                            'has-success': form.content.$valid }" >
-                                <label>Put the source here amore!</label>
-                                <textarea ng-model="querydata.content" class="form-control" name="content" required ></textarea>
-                            </div>
-                            
                             <div class="form-group" >
                                 <label class="radio-inline">
                                     <input ng-model="querydata.site" type="radio" name="site" value="11st" checked> 11st
@@ -59,9 +49,35 @@
                                     <input ng-model="querydata.site" type="radio" name="site" value="coupang"> Coupang
                                 </label>
                             </div>
+
+                            <div class="form-group" ng-show="querydata.site == '11st_mobile'">
+                                <label>Choose the category</label>
+                                <select ng-model="querydata.category" class="form-control" >
+                                    <option value="1">브랜드패션</option>
+                                    <option value="2">의류</option>
+                                    <option value="3">잡화</option>
+                                    <option value="4">뷰티</option>
+                                    <option value="5">식품</option>
+                                    <option value="6">유아동</option>
+                                    <option value="7">가구/생활</option>
+                                    <option value="8">레저/자동차</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" ng-hide="querydata.site == '11st_mobile'"
+                            ng-class="{ 
+                            'has-error': form.content.$error.required || (form.$submitted && !result.length), 
+                            'has-success': form.content.$valid }" >
+                                <label>Put the link here amore!</label>
+                                <input ng-model="querydata.link" class="form-control" name="link" ></input>
+                            </div>
+                            <div class="form-group" ng-hide="querydata.site == '11st_mobile'">
+                                <label>Or the source here!</label>
+                                <textarea ng-model="querydata.pagesource" class="form-control"></textarea>
+                            </div>
                             
                             <div class="form-group form-inline" >
-                                <button type="submit" class="btn btn-default btn-primary">Generate</button>
+                                <button type="submit" class="btn btn-default btn-primary" ng-disabled="processing">{{ processing ? button.processing : button.generate }}</button>
                                 <button type="button" class="btn btn-default" ng-show="result.length" ng-click="saveData()">Save Data</button>
                             </div>
                         </form>
@@ -98,7 +114,9 @@
                     </div>
                 </nav>
             </div>
-            <div class="col-md-3">
+
+            <!-- product image preview -->
+            <div ng-class="selectedProduct.image ? 'col-md-3' : ''" ng-show="selectedProduct.image">
                 <div class="panel panel-default">
                     <div class="panel-body" >
                         <div class="thumbnail">
@@ -112,54 +130,52 @@
                 </div>
             </div>
         </div>
-		
+        
+        <!-- error message -->
+        <div class="panel panel-default" ng-show="form.$submitted && !result.length">
+            <div class="panel-body bg-warning" >
+                <span class="glyphicon glyphicon-remove"></span> Try again amore mio!
+            </div>
+        </div>
+            
+        <div class="result" ng-show="result.length">
+            <table id="pretty-table" class="table table-condensed table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Market</th>
+                        <th>Title</th>
+                        <th>Link</th>
+                        <th>Seller</th>
+                        <th>Price</th>
+                        <th>Price2</th>
+                        <th>Delivery</th>
+                        <th>Other</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-click="setSelectedProduct($event, d)" 
+                    ng-repeat="d in result | orderBy:sort.propertyName:sort.reverse | filter:filter track by $index">
+                        <td>{{d.rank | number}}</td>
+                        <td><span class="label label-default label-primary">{{d.market}}</span></td>
+                        <!--<td><div class="media-left">
+                            <a href="#"><img class="media-object" style="width: 100px; height: auto;" src="{{d.image}}"  ></a>
+                        </div>
+                        <div class="media-body">{{d.title}}</div>
+                        </td>-->
+                        <td>{{d.title}}</td>
+                        <td><a href="{{d.link}}" >{{d.link}}</a></td>
+                        <td>{{d.seller}}</td>
+                        <td>{{d.price}}</td>
+                        <td>{{d.price2}}</td>
+                        <td>{{d.freedelivery}}</td>
+                        <td>{{d.more}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-		<div class="panel panel-default" ng-show="form.$submitted && !result.length">
-			<div class="panel-body bg-warning" >
-				<span class="glyphicon glyphicon-remove"></span> Try again amore mio!
-			</div>
-		</div>
-
-		<div ng-show="result.length">
-			
-			<div class="result">
-				<table id="pretty-table" class="table table-condensed table-striped table-bordered">
-					<thead>
-						<tr>
-							<th>#</th>
-                            <th>Market</th>
-							<th>Title</th>
-							<th>Link</th>
-							<th>Seller</th>
-							<th>Price</th>
-							<th>Price2</th>
-							<th>Delivery</th>
-							<th>Other</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-click="setSelectedProduct($event, d)" 
-                        ng-repeat="d in result | orderBy:sort.propertyName:sort.reverse | filter:filter track by $index">
-							<td>{{d.rank | number}}</td>
-                            <td><span class="label label-default label-primary">{{d.market}}</span></td>
-                            <!--<td><div class="media-left">
-                                <a href="#"><img class="media-object" style="width: 100px; height: auto;" src="{{d.image}}"  ></a>
-                            </div>
-                            <div class="media-body">{{d.title}}</div>
-                            </td>-->
-                            <td>{{d.title}}</td>
-							<td><a href="{{d.link}}" >{{d.link}}</a></td>
-							<td>{{d.seller}}</td>
-							<td>{{d.price}}</td>
-							<td>{{d.price2}}</td>
-							<td>{{d.freedelivery}}</td>
-							<td>{{d.more}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+</div>
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>

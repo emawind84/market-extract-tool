@@ -96,34 +96,41 @@ page.onError = function(msg, trace) {
 };
 
 page.open(host, function(status) {
-    //page.includeJs( "https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js", function() {
-        page.evaluate(function() {
-            var onLoadComplete = function(){
-                window._finishedCall = true;
-            }
-            
-            var maxh = 0;
-            var id = setInterval(function(){
-                console.log(maxh, document.body.scrollHeight);
-                if(maxh === document.body.scrollHeight) {
-                    clearInterval(id);
-                    onLoadComplete();
-                };
-                maxh = document.body.scrollHeight;
-                window.scrollTo(0, document.body.scrollHeight);
-            }, 500);
+    page.evaluate(function() {
+        var onLoadComplete = function(){
+            window._finishedCall = true;
+        }
+
+        var elements = document.getElementsByTagName('aside');
+        for (var i = 0; i < elements.length; i++) { 
+            elements[i].parentNode.removeChild(elements[i]);
+        }
+
+        // stupid 11st right bar
+        var _t = document.getElementById('wingBnr2');
+        _t.parentNode.removeChild(_t);
+
+        var maxh = 0;
+        var id = setInterval(function(){
+            if(maxh == document.body.scrollHeight) {
+                clearInterval(id);
+                onLoadComplete();
+            };
+            maxh = document.body.scrollHeight;
+            window.scrollTo(0, document.body.scrollHeight);
+        }, 1000);
+    });
+    
+    waitFor(function check(){
+        return page.evaluate(function(){
+            return window._finishedCall;
         });
-        
-        waitFor(function check(){
-            return page.evaluate(function(){
-                return window._finishedCall;
-            });
-        }, function onReady(){
-            var output = "/tmp/marketbest/output.html";
-            output && fs.write(output, page.content, 'w');
-        
-            phantom.exit();
-        }, 20000); // 20 seconds maximum timeout
-        
-    //});
+    }, function onReady(){
+        var output = "/tmp/marketbest/output.html";
+        output && fs.write(output, page.content, 'w');
+    
+        //page.render('/tmp/output.png');
+
+        phantom.exit();
+    }, 10000); // 20 seconds maximum timeout
 });

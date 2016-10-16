@@ -4,34 +4,52 @@
     var market_code = '11st_mobile';
     
     window.extractData || (window.extractData = {});
-    window.extractData[market_code] = function(doc){
+    window.extractData[market_code] = function(doc, result, $http, querydata){
         console.log('extracting 11st data...');
-        var result = [];
-        $('.thumbnail_list > ul > li', doc).not('.ranking_more').each(function(){
-            var rank = $(this).find('.flg_ranking').text();
-            var title = $(this).find('.pup_title a').text();
-            var link = $(this).find('.pup_title a').attr('href');
-            var price = $(this).find('.pub_price').text().replace('~','').replace('원','');
-            var freedelivery = $(this).find('.ico_deliver1 b').text();
-            var seller = $(this).find('.seller_id > a').text();
-            
-            $(this).find('.pub_salep').find('.plus_option').remove()
-            var price2 = $(this).find('.pub_salep').text().replace('~','').replace('원','');
-            
-            result.push({
-                rank: rank,
-                title: title,
-                link: link,
-                price: price,
-                price2: price2,
-                freedelivery: freedelivery,
-                seller: seller,
-                market: market_code
-                //,dom: this
-            });
-        });
+        //var result = [];
+        $http({
+            url: '/bestmarket/11mobile',
+            data: {
+                cat: querydata.category
+            },
+            method: 'POST',
+            dataType: 'json'
+        }).then(function(response){
+            console.log(response.data);
+            var data = response.data.data;
 
-        return result;
+            for( var i = 0; i < data.length; i++ ) {
+                if( data[i].hasOwnProperty('commonProduct') ) {
+                    var prod = data[i].commonProduct;
+
+                    var rank = prod.RANK;
+                    var title = prod.prdNm;
+                    var link = prod.linkUrl;
+                    var price = prod.finalDscPrc;
+                    var price2 = ""
+                    var freedelivery = (prod.benefitList.length) ? prod.benefitList[0].rate : '';
+                    var seller = '';
+                    var image = prod.prdImgUrl;
+                    
+                    result.push({
+                        rank: rank,
+                        title: title,
+                        link: link,
+                        price: price,
+                        price2: price2,
+                        freedelivery: freedelivery,
+                        seller: seller,
+                        market: market_code,
+                        image: image
+                    });
+
+                }
+            }
+
+            console.log(result);
+
+        });
+        
     }
     
 })();

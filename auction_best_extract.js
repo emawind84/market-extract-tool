@@ -2,9 +2,9 @@
     var market_code = 'auction';
 
     window.extractData || (window.extractData = {});
-    window.extractData[market_code] = function(doc){
+    window.extractData[market_code] = function(doc, result){
         console.log('extracting auction data...');
-        var result = [];
+        //var result = [];
         $('#itembest_T', doc).find('> ul > li').each(function( index, value ){
             var rank = $(this).find('.rank').text();
             var title = $(this).find('.info em a').text();

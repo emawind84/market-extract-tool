@@ -3,10 +3,11 @@
     var market_code = 'gmarket';
 
     window.extractData || (window.extractData = {});
-    window.extractData[market_code] = function(doc){
+    window.extractData[market_code] = function(doc, result){
         console.log('extracting gmarket data...');
-        var result = [];
+        //var result = [];
         $('.best-list', doc).not('.type2').find('ul > li').each(function(index, value){
+            console.log('####11111');
             var title = $(this).find('.itemname').text();
             var link = $(this).find('.itemname').attr('href');
             var price = $(this).find('.o-price span span').text().replace('~','').replace('원','');
@@ -31,6 +32,8 @@
                 market: market_code,
                 image: image
             });
+
+            console.log(result);
         });
 
         return result;

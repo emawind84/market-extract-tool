@@ -4,14 +4,20 @@
 
     var market = angular.module('market', []);
     market.controller('MarketController', 
-    ['$scope', '$window', '$log', 'bestmarket', function($scope, $window, $log, bestmarket){
+    ['$scope', '$window', '$log', '$http', 'bestmarket', function($scope, $window, $log, $http, bestmarket){
         $scope.querydata = {
             site: '11st',
             content: 'I love you!',
-            defaultImage: 'resources/angel.jpg'
+            defaultImage: '',
+            category: '1'
         };
         $scope.selectedProduct = {};
         $scope.researches = [];
+        $scope.processing = false;
+        $scope.button = {
+            generate: 'Generate',
+            processing: 'Wait Amore...'
+        };
 
         $scope.sort = {
             propertyName: 'rank',
@@ -43,10 +49,27 @@
         }
         
         $scope.parseData = function(query){
+            $scope.processing = true;
+
             //$log.debug(query);
-            $scope.result = $window.extractData[query.site](query.content);
-            fixDataType();
+            if( query.link ) {
+                bestmarket.loadPage(query.link).then(function(response){
+                    //$log.log(response.data);
+                    extractData(response.data);
+                    $scope.processing = false;
+                });
+            }
+            else {
+                extractData(query.pagesource);
+                $scope.processing = false;
+            }
         };
+
+        var extractData = function(source){
+            $scope.result = [];
+            $window.extractData[$scope.querydata.site](source, $scope.result, $http, $scope.querydata);
+            fixDataType();
+        }
 
         var loadResearches = function(){
             bestmarket.loadResearches().then(function(response){
@@ -72,7 +95,7 @@
                 url: '/bestmarket/types',
                 method: 'GET'
             });
-        } 
+        }
 
         factory.save = function(data, research){
             return $http({
@@ -93,6 +116,16 @@
                 data: {
                     q: query,
                     type: research || 'none'
+                },
+                method: 'POST'
+            });
+        }
+
+        factory.loadPage = function(link){
+            return $http({
+                url: '/bestmarket/page',
+                data: {
+                    link: link
                 },
                 method: 'POST'
             });

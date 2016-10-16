@@ -4,9 +4,9 @@
     var market_code = '11st';
     
     window.extractData || (window.extractData = {});
-    window.extractData[market_code] = function(doc){
+    window.extractData[market_code] = function(doc, result){
         console.log('extracting 11st data...');
-        var result = [];
+        //var result = [];
         $('#bestPrdList > ul > li', doc).not('.ranking_more').each(function(){
             var rank = $(this).find('.flg_ranking').text();
             var title = $(this).find('.pup_title a').text();

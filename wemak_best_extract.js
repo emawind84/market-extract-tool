@@ -3,9 +3,9 @@
     var market_code = 'wemak';
     
     window.extractData || (window.extractData = {});
-    window.extractData[market_code] = function(doc){
+    window.extractData[market_code] = function(doc, result){
         console.log('extracting wemak data...');
-        var result = [];
+        //var result = [];
         $('.section_list', doc).find('> ul > li').each(function( index, value ){
             var title = $(this).find('.tit_desc').text();
             var link = $(this).find('a[loc_info]').attr('href');
