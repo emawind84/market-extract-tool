@@ -9,7 +9,7 @@
             site: '11st',
             content: 'I love you!',
             defaultImage: '',
-            category: '1'
+            extra: ''
         };
         $scope.selectedProduct = {};
         $scope.researches = [];

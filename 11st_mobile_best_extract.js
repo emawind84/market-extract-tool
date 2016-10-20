@@ -10,7 +10,7 @@
         $http({
             url: '/bestmarket/11mobile',
             data: {
-                cat: querydata.category
+                querystring: querydata.extra
             },
             method: 'POST',
             dataType: 'json'
