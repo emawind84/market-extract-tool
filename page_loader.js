@@ -108,7 +108,7 @@ page.open(host, function(status) {
 
         // stupid 11st right bar
         var _t = document.getElementById('wingBnr2');
-        _t.parentNode.removeChild(_t);
+        _t && _t.parentNode.removeChild(_t);
 
         var maxh = 0;
         var id = setInterval(function(){
